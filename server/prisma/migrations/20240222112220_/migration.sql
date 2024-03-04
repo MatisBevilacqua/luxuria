@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Image` MODIFY `url` LONGBLOB NOT NULL;

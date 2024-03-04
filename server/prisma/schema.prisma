@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  name     String?
+  password String
+  token    String
+}
+
+model Car {
+  id           Int           @id @default(autoincrement())
+  name         String
+  description  String        @db.VarChar(1000)
+  location     String
+  pricePerHour Float
+  city         String
+  images       Image[]
+  reservations Reservation[]
+}
+
+model Yacht {
+  id           Int           @id @default(autoincrement())
+  name         String
+  description  String        @db.VarChar(1000)
+  pricePerHour Float
+  location     String
+  city         String
+  images       Image[]
+  reservations Reservation[]
+}
+
+model Image {
+  id      Int    @id @default(autoincrement())
+  url     String
+  carId   Int?
+  yachtId Int?
+  car     Car?   @relation(fields: [carId], references: [id])
+  yacht   Yacht? @relation(fields: [yachtId], references: [id])
+
+  @@index([carId], map: "Image_carId_fkey")
+  @@index([yachtId], map: "Image_yachtId_fkey")
+}
+
+model ClientReservation {
+  id           Int           @id @default(autoincrement())
+  name         String
+  adress       String
+  phone        String
+  email        String
+  reservations Reservation[]
+}
+
+model Reservation {
+  id                  Int               @id @default(autoincrement())
+  clientReservationId Int
+  startTime           DateTime
+  endTime             DateTime
+  reservationDate     DateTime
+  total               String
+  carId               Int?
+  yachtId             Int?
+  isPaid              Boolean?          @default(false)
+  car                 Car?              @relation(fields: [carId], references: [id])
+  yacht               Yacht?            @relation(fields: [yachtId], references: [id])
+  ClientReservation   ClientReservation @relation(fields: [clientReservationId], references: [id])
+
+  @@index([clientReservationId], map: "Reservation_clientReservationId_fkey")
+}
+
+model Ticket {
+  id             Int                 @id @default(autoincrement())
+  title          String
+  description    String
+  pricePerPerson Float
+  eventDate      DateTime
+  reservations   TicketReservation[]
+}
+
+model TicketReservation {
+  id              Int      @id @default(autoincrement())
+  ticketId        Int
+  quantity        Int
+  totalPrice      Float
+  reservationDate DateTime
+  ticket          Ticket   @relation(fields: [ticketId], references: [id])
+
+  @@index([ticketId], map: "TicketReservation_ticketId_fkey")
+}
+
+model Contact {
+  id Int @id @default(autoincrement())
+  name String
+  phone String
+  email String
+  message String
+}
