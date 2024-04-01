@@ -18,24 +18,38 @@ interface Reservation {
 export default function Reservations() {
     const [carReservations, setCarReservations] = useState<Reservation[]>([]);
     const [yachtReservations, setYachtReservations] = useState<Reservation[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>('');
 
     useEffect(() => {
-        const fetchDate = async () => {
+        const fetchData = async () => {
+            setLoading(true);
+            setError('');
+
             const token = localStorage.getItem('token');
             if (token) {
                 try {
-                    const bookingCar: Reservation[] = await GetReservations('car', token);
-                    const bookingYacht: Reservation[] = await GetReservations('yacht', token);
+                    const bookingCar: Reservation[] = await GetReservations(token, 'car');
+                    const bookingYacht: Reservation[] = await GetReservations(token, 'yacht');
+
+                    // Trier les réservations par date de réservation la plus récente
+                    bookingCar.sort((a, b) => new Date(b.reservationDate).getTime() - new Date(a.reservationDate).getTime());
+                    bookingYacht.sort((a, b) => new Date(b.reservationDate).getTime() - new Date(a.reservationDate).getTime());
+
                     setCarReservations(bookingCar);
                     setYachtReservations(bookingYacht);
                 } catch (err) {
-                    console.error(err);
+                    setError('Une erreur s\'est produite lors de la récupération des données.');
+                } finally {
+                    setLoading(false);
                 }
             } else {
-                console.error("Token not found in local storage");
+                setError('Token non trouvé dans le stockage local');
+                setLoading(false);
             }
         };
-        fetchDate();
+
+        fetchData();
     }, []);
 
     return (
@@ -44,28 +58,42 @@ export default function Reservations() {
 
             <div className="pl-[12vw] pt-[5vh]">
                 <h1 className="text-[50px] font-bold">Vos réservations se trouvent ici</h1>
-                <p className="text-[20px]">Yachts</p>
-                <ul>
-                    {yachtReservations.map((reservation, index) => (
-                        <li key={index}>
-                            <p>Nom: {reservation.ClientReservation.name}</p>
-                            <p>Adresse: {reservation.ClientReservation.adress}</p>
-                            <p>Téléphone: {reservation.ClientReservation.phone}</p>
-                            <p>Email: {reservation.ClientReservation.email}</p>
-                        </li>
-                    ))}
-                </ul>
-                <p className="text-[20px]">Voitures</p>
-                <ul>
-                    {carReservations.map((reservation, index) => (
-                        <li key={index}>
-                            <p>Nom: {reservation.ClientReservation.name}</p>
-                            <p>Adresse: {reservation.ClientReservation.adress}</p>
-                            <p>Téléphone: {reservation.ClientReservation.phone}</p>
-                            <p>Email: {reservation.ClientReservation.email}</p>
-                        </li>
-                    ))}
-                </ul>
+                {loading && <p>Chargement en cours...</p>}
+                {error && <p>Erreur: {error}</p>}
+                {!loading && !error && (
+                    <>
+                        <p className="text-[20px]">Yachts</p>
+                        <ul>
+                            {yachtReservations.map((reservation, index) => (
+                                <li key={index}>
+                                    <p>Nom: {reservation.ClientReservation.name}</p>
+                                    <p>Adresse: {reservation.ClientReservation.adress}</p>
+                                    <p>Téléphone: {reservation.ClientReservation.phone}</p>
+                                    <p>Email: {reservation.ClientReservation.email}</p>
+                                    <p>Heure de début: {reservation.startTime}</p>
+                                    <p>Heure de fin: {reservation.endTime}</p>
+                                    <p>Date de réservation: {reservation.reservationDate}</p>
+                                    <p>Prix total: {reservation.total}</p>
+                                </li>
+                            ))}
+                        </ul>
+                        <p className="text-[20px]">Voitures</p>
+                        <ul>
+                            {carReservations.map((reservation, index) => (
+                                <li key={index}>
+                                    <p>Nom: {reservation.ClientReservation.name}</p>
+                                    <p>Adresse: {reservation.ClientReservation.adress}</p>
+                                    <p>Téléphone: {reservation.ClientReservation.phone}</p>
+                                    <p>Email: {reservation.ClientReservation.email}</p>
+                                    <p>Heure de début: {reservation.startTime}</p>
+                                    <p>Heure de fin: {reservation.endTime}</p>
+                                    <p>Date de réservation: {reservation.reservationDate}</p>
+                                    <p>Prix total: {reservation.total}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
             </div>
         </div>
     );

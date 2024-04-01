@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import Logo from './Logo';
 
 export default function Header() {
   const location = useLocation();
@@ -7,6 +8,7 @@ export default function Header() {
   return (
     <header className='w-full p-[20px] h-[10vh] bg-[#003566] z-[3] fixed'>
       <nav className='w-full h-full flex items-center justify-center'>
+      <Logo className='w-[50px] ml-[20px] h-[50px] rounded-[9999px] absolute left-0  max-[992px]:hidden'/>
         <ul className='flex gap-[20px]'>
           <Link to="/">
             <li className={`text-[#FFF] text-[18px] ${location.pathname === '/' ? 'font-bold' : ''} relative group`}>

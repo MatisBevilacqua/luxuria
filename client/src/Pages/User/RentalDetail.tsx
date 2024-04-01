@@ -4,7 +4,6 @@ import Header from '../../Components/Header';
 import getById from '../../Api/User/GetById';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
-import Footer from '../../Components/Footer';
 import ModalBooking from '../../Components/ModalBooking';
 
 export default function RentalDetail() {
@@ -77,7 +76,6 @@ export default function RentalDetail() {
                     </div>
                 </div>
             </section>
-            <Footer/>
             <ModalBooking isOpen={isModalOpen} onClose={closeModal} id={id} type={category} price={rental.pricePerHour} />
         </>
     )

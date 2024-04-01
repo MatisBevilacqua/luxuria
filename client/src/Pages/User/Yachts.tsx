@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../Components/Header';
-import Footer from '../../Components/Footer';
 import getAll from '../../Api/User/GetAll';
 import Card from '../../Components/Card';
 import { useNavigate } from 'react-router-dom';
@@ -51,7 +50,6 @@ export default function Cars() {
         </div>
 
       </div>
-      <Footer />
     </>
   );
 }

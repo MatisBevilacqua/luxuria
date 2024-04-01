@@ -405,13 +405,62 @@ app.post('/contact', async (req, res) => {
         message
       }
     });
-
     res.status(201).json({ message: 'Contact créé avec succès', contact: newContact });
   } catch (error) {
     console.error('Erreur lors de la création du contact :', error);
     res.status(500).json({ message: 'Erreur lors du traitement de la requête' });
   }
 });
+
+
+// Route pour supprimer une voiture
+app.delete('/car/:id', authenticateToken, async (req, res) => {
+  const carId = parseInt(req.params.id);
+
+  try {
+    const deletedCar = await prisma.car.delete({
+      where: {
+        id: carId,
+      },
+    });
+
+    await prisma.image.deleteMany({
+      where: {
+        carId: carId,
+      },
+    });
+
+    res.json({ message: 'Voiture supprimée avec succès', car: deletedCar });
+  } catch (error) {
+    console.error('Erreur lors de la suppression de la voiture :', error);
+    res.status(500).json({ message: 'Erreur lors de la suppression de la voiture.' });
+  }
+});
+
+// Route pour supprimer un yacht
+app.delete('/yacht/:id', authenticateToken, async (req, res) => {
+  const yachtId = parseInt(req.params.id);
+
+  try {
+    const deletedYacht = await prisma.yacht.delete({
+      where: {
+        id: yachtId,
+      },
+    });
+
+    await prisma.image.deleteMany({
+      where: {
+        yachtId: yachtId,
+      },
+    });
+
+    res.json({ message: 'Yacht supprimé avec succès', yacht: deletedYacht });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du yacht :', error);
+    res.status(500).json({ message: 'Erreur lors de la suppression du yacht.' });
+  }
+});
+
 
 const server = app.listen(3000, () =>
   console.log(`

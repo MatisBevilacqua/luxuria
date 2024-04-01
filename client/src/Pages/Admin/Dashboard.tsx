@@ -3,6 +3,8 @@ import addCar from '../../Api/Admin/AddCar';
 import addYacht from "../../Api/Admin/AddYacht";
 import VerifyToken from "../../Components/Security/VerfiyToken";
 import HeaderDashbaord from "../../Components/Admin/HeaderDashbaord";
+import getAll from "../../Api/User/GetAll";
+import deleteItem from "../../Api/Admin/DeleteItem";
 
 interface Offer {
   name: string;
@@ -40,6 +42,24 @@ const Dashboard = (props: Props) => {
   const [message, setMessage] = useState<string>('');
   const [carImageLinks, setCarImageLinks] = useState<string>('');
   const [yachtImageLinks, setYachtImageLinks] = useState<string>('');
+  const [responseCar, setResponseCar] = useState<any[]>([]);
+  const [responseYacht, setResponseYacht] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const responseCarData = await getAll('cars') as any[];
+        const responseYachtData = await getAll('yachts') as any[];
+        setResponseCar(responseCarData);
+        setResponseYacht(responseYachtData);
+      } catch (err) {
+        console.error('Error lors de la récupération', err);
+      }
+    };
+
+    fetchData();
+
+  }, []);
 
   const handleSubmitCar = async () => {
     try {
@@ -59,7 +79,7 @@ const Dashboard = (props: Props) => {
   const handleSubmitYacht = async () => {
     try {
       const token = localStorage.getItem('token');
-      if(token){
+      if (token) {
         const response = await addYacht({ ...yachtOffer, images: yachtImageLinks.split(',') }, token);
         setMessage('Yacht ajouté avec succès !');
         setYachtOffer({ name: "", pricePerHour: 0, description: "", images: [], location: "", city: "" });
@@ -90,9 +110,25 @@ const Dashboard = (props: Props) => {
     }
   };
 
+  const removeCar = (id: string) => {
+    const token = localStorage.getItem('token');
+
+    if(token){
+      const response = deleteItem('car', id, token);
+    }
+  }
+
+  const removeYacht = (id: string) => {
+    const token = localStorage.getItem('token');
+    
+    if(token){
+      const response = deleteItem('yacht', id, token);
+    }
+  }
+
   return (
-    <div className="w-full h-[100vh] bg-[#e9ecef]">
-      <HeaderDashbaord/>
+    <div className="w-full bg-[#e9ecef]">
+      <HeaderDashbaord />
       <div className="pl-[12vw] pt-[5vh]">
         <h1 className="text-[50px] font-bold">Ajouter des locations</h1>
         <p className="text-[20px]">Ajoutez ici, voitures et yatch</p>
@@ -224,6 +260,41 @@ const Dashboard = (props: Props) => {
               Créer une location (Yacht)
             </button>
           </div>
+        </div>
+        <div className="mt-[10vh]">
+          <h1 className="text-[50px] font-bold">Vos offres</h1>
+          <p className="text-[20px] mb-[10vh]">Suprimmer ici, voitures et yatch</p>
+
+          {responseCar.length > 0 && (
+            <div className="w-100% flex flex-col gap-[30px]">
+              {responseCar.map((car, index) => (
+                <div className="flex p-[20px] w-[90%] bg-white gap-[10px] gap-[20px] rounded-md" key={index}>
+                  <h2>Voitures</h2>
+                  <p>{car.name}</p>
+                  <p>{car.description}</p>
+                  <p>{car.location}</p>
+                  <p>{car.pricePerHour} euros /h</p>
+                  <button onClick={() => removeCar(car.id)}>Supprimer</button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {responseYacht.length > 0 && (
+            <div className="w-100% flex flex-col gap-[30px] mt-[5vh]">
+              {responseYacht.map((yacht, index) => (
+                <div className="flex p-[20px] w-[90%] bg-white  gap-[20px] rounded-md" key={index}>
+                  <h2>Yachts</h2>
+                  <p>{yacht.name}</p>
+                  <p>{yacht.description}</p>
+                  <p>{yacht.location}</p>
+                  <p>{yacht.pricePerHour} euros /h</p>
+                  <button onClick={() => removeYacht(yacht.id)}>Supprimer</button>
+                </div>
+              ))}
+            </div>
+          )}
+
         </div>
       </div>
     </div>

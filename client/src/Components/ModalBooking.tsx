@@ -35,7 +35,7 @@ const ModalBooking = ({ isOpen, onClose, type, id, price }: ModalProps) => {
             setShowForm(false);
         } else {
             setSelectedTimeSlots([]);
-            setSelectedSlotsCount(0); // Réinitialiser le nombre de créneaux sélectionnés lorsque la modal est fermée
+            setSelectedSlotsCount(0); 
         }
     }, [isOpen]);
 

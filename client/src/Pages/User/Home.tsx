@@ -37,8 +37,7 @@ export default function Home() {
     };
 
     const images = [
-        "https://s1.1zoom.me/b5050/392/Monte_Carlo_Monaco_Sea_511220_1920x1080.jpg",
-        "https://preview.redd.it/znagm6s1j7871.jpg?auto=webp&s=d4a457b02594d723a7328815d8d4833f820f2d1c"
+        "https://s1.1zoom.me/b5050/392/Monte_Carlo_Monaco_Sea_511220_1920x1080.jpg"
     ];
 
     const initialData = [
@@ -108,7 +107,6 @@ export default function Home() {
                 >
                     <TextGenerateEffect words="A desire for freedom ?" containerClassName="text-[#FFFF] text-2xl leading-snug tracking-wide text-[80px] text-center max-[500px]:text-[30px] max-[992px]:text-[40px]" />
                     <TextGenerateEffect words="Thanks to LuxuriaTrip, your dream rental is just phone call away !" containerClassName=" text-center text-2xl leading-snug tracking-wide font-[400] text-[30px] max-[500px]:text-[18px] max-[992px]:text-[25px]" />
-                    <Logo className='rounded-[99999px] w-[100px] h-[100px] mt-[5vh]' />
                 </motion.div>
             </ImagesSlider>
 
@@ -188,7 +186,7 @@ export default function Home() {
                     ))}
                 </div>
 
-                <div className="w-[50%] h-[50vh]  bg-[url('../../../public/img/dance.jpeg')] bg-center bg-cover rounded-md hidden min-[992px]:block">
+                <div className="w-[50%] h-[80vh]  bg-[url('../../../public/img/why.jpeg')] bg-center bg-cover rounded-md hidden min-[992px]:block">
 
                 </div>
             </section>
@@ -250,8 +248,6 @@ export default function Home() {
                     </div>
                 </form>
             </div>
-
-            <Footer />
         </>
     )
 }

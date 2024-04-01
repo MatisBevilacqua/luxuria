@@ -1,6 +1,5 @@
 import React from 'react'
 import Header from '../../Components/Header'
-import Footer from '../../Components/Footer'
 
 export default function Ticket() {
     return (
@@ -11,7 +10,6 @@ export default function Ticket() {
                 <p className='text-[20px] text-[#003566]'> Home / Tickets</p>
                 <p className='text-center text-[30px] text-[#003566]'>Coming soon !</p>
             </div>
-            <Footer/>
         </>
     )
 }
