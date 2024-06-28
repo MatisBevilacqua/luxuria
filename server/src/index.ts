@@ -7,7 +7,6 @@ const paypal = require('@paypal/checkout-server-sdk');
 const prisma = new PrismaClient();
 const app = express();
 const clientId = 'AelpGoErXY2BGwJVAJ7mXHLhCnnbdXBpqMfIodUw7K9vucuV9z8LXfEUJrPAhGIosSqjFT9ASeIHE3Re';
-const clientSecret = 'ELLc-YfJ2gpo0e7T6JEMmo-Ul0sE3ndTizXRQYEfPnNzKVSOiaW9_XGogm0gKDG_nagrKfqJ5NEWBsbY';
 
 const environment = new paypal.core.SandboxEnvironment(clientId, clientSecret);
 const client = new paypal.core.PayPalHttpClient(environment);
